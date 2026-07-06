@@ -1,74 +1,41 @@
+![Chess Misery](main-image.jpg)
+
 # Chess Misery Discord Bot
 
-Posts a Discord report when a linked Chess.com user loses a game. Reports include the opponent, result, estimated Elo change, new rating, and locally computed blunders from the game PGN.
+Posts a image report on your prefered discord channel when a linked Chess.com user loses a game. Reports include the opponent, result, estimated Elo change, new rating, and locally computed blunders from the game PGN.
+
+## Lightweight
+
+No database server needed. State is stored in a single JSON file by default, so the bot runs anywhere Node.js does — a cheap VPS, Render's free tier, or your own machine. For persistent cloud deploys (Heroku, Render, Railway) you can point it at an Upstash Redis instance instead. The Stockfish engine and chess piece assets are bundled in `vendor/` so there are no extra installs.
 
 ## Setup
 
 1. Create a Discord application and bot in the Discord Developer Portal.
-2. Enable the bot in your server with the `bot` and `applications.commands` scopes.
+2. Enable the bot with the `bot` and `applications.commands` scopes.
 3. Copy `.env.example` to `.env` and fill in `DISCORD_TOKEN`, `DISCORD_CLIENT_ID`, and optionally `DISCORD_GUILD_ID`.
-4. Install dependencies:
+4. `npm install`
+5. `npm run deploy` — registers slash commands.
+6. `npm start`
 
-```bash
-npm install
-```
+For cloud deploys set config vars instead of committing a `.env` file. If the filesystem is ephemeral (Heroku), set `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` for persistent storage.
 
-5. Register slash commands:
+## Commands
 
-```bash
-npm run deploy
-```
+All commands are slash commands. Commands marked **Manage Server** require that permission.
 
-6. Start the bot:
-
-```bash
-npm start
-```
-
-## Heroku
-
-Heroku does not currently offer free dynos. If you deploy there, use a worker dyno; the included `Procfile` runs `npm start`.
-
-Set these config vars in Heroku instead of committing a `.env` file:
-
-- `DISCORD_TOKEN`
-- `DISCORD_CLIENT_ID`
-- `DISCORD_GUILD_ID`, optional but recommended while testing
-- `CHESS_COM_USER_AGENT`
-- `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`, recommended for persistent storage
-
-Run slash-command registration once after setting config vars:
-
-```bash
-heroku run npm run deploy
-```
-
-Important: Heroku's filesystem is ephemeral. Set `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` for persistent storage. Without them, the default JSON database can be lost on deploy/restart.
-
-## Render
-
-Deploy as a Node.js Web Service, not a background worker, if you want to use Render's free web-service tier.
-
-- Build command: `npm install`
-- Start command: `npm start`
-- Health endpoint: `/health`
-
-The bot starts a tiny HTTP server on `PORT` for Render health checks and uptime pings. Set `HEALTH_SERVER_ENABLED=false` only on hosts where you do not want an HTTP listener.
-
-## Discord Commands
-
-- `/set-loss-channel channel:#channel` sets the report channel. Requires Manage Server.
-- `/link-chess username:<name> [user:@member]` links yourself, or links another member if you have Manage Server.
-- `/unlink-chess [user:@member]` removes a link.
-- `/chess-links` shows current links.
-- `/check-chess-losses` runs an immediate poll. Requires Manage Server.
+| Command | Description |
+|---|---|
+| `/set-loss-channel` | Set the channel for loss reports. **Manage Server** |
+| `/link-chess` | Link a Discord user to a Chess.com username. |
+| `/unlink-chess` | Remove a link. |
+| `/chess-links` | Show current links. |
+| `/set-loss-filters` | Filter which losses get reported (time class, rated only, min Elo loss, etc.). **Manage Server** |
+| `/loss-filters` | Show current filters. |
+| `/set-analysis-depth` | Set Stockfish depth 1–20. Higher = stronger but slower. Default is 8. **Manage Server** |
+| `/check-chess-losses` | Trigger an immediate poll. **Manage Server** |
 
 ## Notes
 
-Chess.com PubAPI is read-only and can be cached by Chess.com, so reports are not instant. The bot polls the current and previous monthly archives and avoids posting old games when a user is first linked.
+Chess.com's public API is read-only and may be cached on their end, so reports are not instant. The bot polls the current and previous monthly archives and seeds history on first link so only future losses are reported.
 
-Chess.com does not expose full Game Review blunder classifications through the public API. This bot estimates blunders by running local Stockfish analysis on the PGN and counting moves where the linked player drops at least `BLUNDER_THRESHOLD_CP` centipawns.
-
-The bundled Stockfish Lite engine lives in `vendor/stockfish` so deploys do not need to install the much larger upstream npm package.
-
-Board images use the Cburnett SVG chess pieces from Lichess's public piece assets, bundled in `vendor/pieces/cburnett`.
+Blunder detection runs local Stockfish analysis on the game PGN. Chess.com's own Game Review is not available through the public API.

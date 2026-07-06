@@ -41,6 +41,7 @@ const COMMAND_HANDLERS = new Map([
   ['set-loss-filters', handleSetLossFilters],
   ['loss-filters', handleLossFilters],
   ['check-chess-losses', handleCheckChessLosses],
+  ['set-analysis-depth', handleSetAnalysisDepth],
 ]);
 
 function createClient() {
@@ -198,6 +199,16 @@ async function handleCheckChessLosses(interaction) {
   await interaction.editReply('Checked Chess.com for new losses.');
 }
 
+async function handleSetAnalysisDepth(interaction) {
+  const depth = interaction.options.getInteger('depth', true);
+  store.setAnalysisDepth(interaction.guildId, depth);
+  await store.save();
+  await interaction.reply({
+    content: `Stockfish analysis depth set to **${depth}**.`,
+    flags: MessageFlags.Ephemeral,
+  });
+}
+
 async function pollAllGuilds(client) {
   if (pollInProgress) return pollInProgress;
   pollInProgress = pollAllGuildsLocked(client).finally(() => {
@@ -265,7 +276,7 @@ async function processChessUserForGuild(channel, guildId, chessUsername, gameCac
       continue;
     }
 
-    const analysis = prepareAnalysis(await analyzeGameForReport(game, summary));
+    const analysis = prepareAnalysis(await analyzeGameForReport(game, summary, guildId));
     if (!matchesAnalysisFilters(analysis, guild.filters)) {
       markGameProcessed(state, game, summary);
       dirty = true;
@@ -384,12 +395,17 @@ function formatFilters(filters = {}) {
   ].join('\n');
 }
 
-async function analyzeGameForReport(game, summary) {
+async function analyzeGameForReport(game, summary, guildId) {
   const canAnalyze =
     summary.rules === 'chess' && typeof game.pgn === 'string' && game.pgn.trim().length > 0;
-  return canAnalyze
-    ? await analyzeBlunders(game.pgn, summary.color, config)
-    : { available: false, reason: `Analysis only supports standard chess PGNs. Rules: ${summary.rules}` };
+  if (!canAnalyze) {
+    return { available: false, reason: `Analysis only supports standard chess PGNs. Rules: ${summary.rules}` };
+  }
+  const guild = store.getGuild(guildId);
+  const analysisConfig = guild?.analysisDepth
+    ? { ...config, analysisDepth: guild.analysisDepth }
+    : config;
+  return analyzeBlunders(game.pgn, summary.color, analysisConfig);
 }
 
 function prepareAnalysis(analysis) {

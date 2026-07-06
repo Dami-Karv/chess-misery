@@ -99,6 +99,19 @@ function buildCommands() {
       .setName('check-chess-losses')
       .setDescription('Check Chess.com now instead of waiting for the next poll.')
       .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
+
+    new SlashCommandBuilder()
+      .setName('set-analysis-depth')
+      .setDescription('Set the Stockfish analysis depth for blunder detection.')
+      .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+      .addIntegerOption((option) =>
+        option
+          .setName('depth')
+          .setDescription('Search depth (1–20). Higher = stronger but slower. Default is 8.')
+          .setMinValue(1)
+          .setMaxValue(20)
+          .setRequired(true),
+      ),
   ].map((command) => command.toJSON());
 }
 

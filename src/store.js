@@ -88,6 +88,12 @@ class BaseStore {
     guild.filters = { ...DEFAULT_FILTERS, ...guild.filters, ...filters };
     return guild.filters;
   }
+
+  setAnalysisDepth(guildId, depth) {
+    const guild = this.guild(guildId);
+    guild.analysisDepth = depth;
+    return depth;
+  }
 }
 
 class JsonStore extends BaseStore {
