@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/damik/Desktop/chess_misery/**)",
+      "Read(//c/Users/damik/Desktop/**)",
+      "Read(//c/Users/damik/**)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\damik\\Desktop"
+    ]
+  }
+}
