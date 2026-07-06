@@ -1,0 +1,23 @@
+{
+  "name": "chessmisery",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "deploy": "node src/deploy-commands.js",
+    "check": "node --check index.js && node --check src/bot.js && node --check src/deploy-commands.js && node --check src/analyzer.js && node --check src/boardImage.js && node --check src/chessCom.js && node --check src/commands.js && node --check src/config.js && node --check src/healthServer.js && node --check src/stockfish.js && node --check src/store.js && node --check src/utils.js"
+  },
+  "engines": {
+    "node": ">=20.11 <23"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chess.js": "^1.4.0",
+    "discord.js": "^14.26.4",
+    "dotenv": "^17.4.2",
+    "sharp": "^0.34.5"
+  }
+}

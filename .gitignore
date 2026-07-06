@@ -1,0 +1,9 @@
+node_modules/
+.env
+*.local
+secrets*.txt
+ssh-key-*.key
+ssh-key-*.key.pub
+data/*.json
+data/*.tmp
+npm-debug.log*
