@@ -1,4 +1,6 @@
-![Chess Misery](main-image.jpg)
+<p align="center">
+  <img src="main-image.jpg" width="280" alt="Chess Misery"/>
+</p>
 
 # Chess Misery Discord Bot
 
