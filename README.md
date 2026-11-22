@@ -1,4 +1,8 @@
-![Chess Misery](main-image.jpg)
+<p align="center">
+  <img src="main-image.jpg" width="220" alt="Chess Misery"/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="https://cdn.simpleicons.org/discord/5865F2" width="220" alt="Discord"/>
+</p>
 
 # Chess Misery Discord Bot
 
@@ -6,7 +10,7 @@ Posts a image report on your prefered discord channel when a linked Chess.com us
 
 ## Lightweight
 
-No database server needed. State is stored in a single JSON file by default, so the bot runs anywhere Node.js does — a cheap VPS, Render's free tier, or your own machine. For persistent cloud deploys (Heroku, Render, Railway) you can point it at an Upstash Redis instance instead. The Stockfish engine and chess piece assets are bundled in `vendor/` so there are no extra installs.
+No database server needed. State is stored in a single JSON file by default, so the bot runs anywhere Node.js does - a cheap VPS, Render's free tier, or your own machine. For persistent cloud deploys (Heroku, Render, Railway) you can point it at an Upstash Redis instance instead. The Stockfish engine and chess piece assets are bundled in `vendor/` so there are no extra installs.
 
 ## Setup
 
@@ -14,7 +18,7 @@ No database server needed. State is stored in a single JSON file by default, so 
 2. Enable the bot with the `bot` and `applications.commands` scopes.
 3. Copy `.env.example` to `.env` and fill in `DISCORD_TOKEN`, `DISCORD_CLIENT_ID`, and optionally `DISCORD_GUILD_ID`.
 4. `npm install`
-5. `npm run deploy` — registers slash commands.
+5. `npm run deploy` - registers slash commands.
 6. `npm start`
 
 For cloud deploys set config vars instead of committing a `.env` file. If the filesystem is ephemeral (Heroku), set `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` for persistent storage.
@@ -31,7 +35,7 @@ All commands are slash commands. Commands marked **Manage Server** require that 
 | `/chess-links` | Show current links. |
 | `/set-loss-filters` | Filter which losses get reported (time class, rated only, min Elo loss, etc.). **Manage Server** |
 | `/loss-filters` | Show current filters. |
-| `/set-analysis-depth` | Set Stockfish depth 1–20. Higher = stronger but slower. Default is 8. **Manage Server** |
+| `/set-analysis-depth` | Set Stockfish depth 1-20. Higher = stronger but slower. Default is 8. **Manage Server** |
 | `/check-chess-losses` | Trigger an immediate poll. **Manage Server** |
 
 ## Notes
