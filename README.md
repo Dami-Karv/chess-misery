@@ -1,7 +1,7 @@
 <p align="center">
-  <img src="main-image.jpg" width="280" alt="Chess Misery"/>
-  &nbsp;&nbsp;
-  <img src="https://cdn.simpleicons.org/discord/5865F2" width="80" alt="Discord"/>
+  <img src="main-image.jpg" width="220" alt="Chess Misery"/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="https://cdn.simpleicons.org/discord/5865F2" width="220" alt="Discord"/>
 </p>
 
 # Chess Misery Discord Bot
